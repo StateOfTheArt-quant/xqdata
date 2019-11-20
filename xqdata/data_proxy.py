@@ -1,7 +1,5 @@
 from xqdata.interface import AbstractDataSource
 from xqdata.trading_dates_mixin import TradingDatesMixin
-import xqdata.base_data_source.default_data_source as dds#import DefaultDataSource
-
 
 class DataProxy(TradingDatesMixin):
     
@@ -14,6 +12,7 @@ class DataProxy(TradingDatesMixin):
     @classmethod
     def get_instance(cls):
         if cls._instance is None:
+            import xqdata.base_data_source.default_data_source as dds#import DefaultDataSource
             data_source = dds.DefaultDataSource()
             return DataProxy(data_source)
         return cls._instance

@@ -2,22 +2,12 @@ import pandas as pd
 from jqdatasdk import query, get_fundamentals, get_fundamentals_continuously, valuation, get_price, get_bars, get_all_trade_days
 from xqdata.trading_dates_mixin import TradingDatesMixin
 from xqdata.base_data_source.indicator_mapping import ALL_INDICATOR_MAPPING
-from xqdata.utils import convert_to_timestamp
+from xqdata.utils import convert_to_timestamp,convert_timestamp_to_str
+from xqdata.data_proxy import DataProxy
 
-from xqdata.utils import convert_timestamp_to_str
 import pdb
 
-#def create_trading_dates_index():
-#    trading_dates = get_all_trade_days()
-#    pdb.set_trace()
-#    trading_dates_timestamp = list(map(convert_to_timestamp, trading_dates))
-#    return pd.Index(trading_dates_timestamp)
-##
-#trading_dates_index = create_trading_dates_index()
-#trading_dates_mixin = TradingDatesMixin(trading_dates_index)
-
 def history_tradings(order_book_ids, bar_count, frequency, dt, fields=['date','open','high','low','close'], skip_suspended=True, include_now=True, adjust_type="pre", adjust_orig=None):
-    from xqdata.data_proxy import DataProxy
     #get_bars(security, count, unit='1d', fields=['date','open','high','low','close'], include_now=False, end_dt=None, fq_ref_date=None)
     if "date" not in fields:
         fields.append("date")
@@ -72,7 +62,6 @@ def get_fundamental_data(order_book_ids, fields, dt_list):
 #
 #
 def _history_bars_fundamentals_jq(order_book_ids, bar_count, fields=None, dt=None):
-    from xqdata.data_proxy import DataProxy
     # 
     start_date = DataProxy.get_instance().get_previous_trading_date(dt, n=bar_count)
     start_date = convert_timestamp_to_str(start_date)
@@ -88,7 +77,6 @@ def _merge_asof(data1, data2):
 #
 #
 def history_bars_fundamentals_jq(order_book_ids, bar_count, frequency, fields=None, dt=None):
-    from xqdata.data_proxy import DataProxy
     """
     return: [pd.Panel] 
            Items: date

@@ -3,16 +3,17 @@ from xqdata.interface import AbstractDataSource
 from jqdatasdk import get_bars, get_all_trade_days
 from xqdata.utils import convert_to_timestamp
 from xqdata.base_data_source.indicator_mapping import ALL_INDICATOR_MAPPING
-import xqdata.base_data_source.history_fundamentals_jqdata as jq
-import pdb
+
 
 class DefaultDataSource(AbstractDataSource):
     def history_tradings(self, order_book_ids, bar_count, frequency, dt, fields=['date','open','high','low','close'], skip_suspended=True, include_now=True, adjust_type="pre", adjust_orig=None):
-        data = jq.history_tradings(order_book_ids=order_book_ids, bar_count=bar_count, frequency=frequency, dt=dt, fields=fields, skip_suspended=skip_suspended, include_now=include_now, adjust_type=adjust_type, adjust_orig=adjust_orig)
+        from xqdata.base_data_source.history_fundamentals_jqdata import history_tradings
+        data = history_tradings(order_book_ids=order_book_ids, bar_count=bar_count, frequency=frequency, dt=dt, fields=fields, skip_suspended=skip_suspended, include_now=include_now, adjust_type=adjust_type, adjust_orig=adjust_orig)
         return data
         
     def history_fundamentals(self,order_book_ids, bar_count, frequency, dt, fields, skip_suspended=True, include_now=True, adjust_type="pre", adjust_orig=None):
-        data_df = jq.history_bars_fundamentals_jq(order_book_ids=order_book_ids, bar_count=bar_count, frequency=frequency, fields=fields, dt=dt)
+        from xqdata.base_data_source.history_fundamentals_jqdata import history_bars_fundamentals_jq
+        data_df = history_bars_fundamentals_jq(order_book_ids=order_book_ids, bar_count=bar_count, frequency=frequency, fields=fields, dt=dt)
         return data_df
     
     def history_bars(self, order_book_ids, bar_count, frequency, dt, fields, skip_suspended=True, include_now=True, adjust_type="pre", adjust_orig=None):
