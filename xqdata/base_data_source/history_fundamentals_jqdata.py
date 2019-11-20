@@ -5,8 +5,6 @@ from xqdata.base_data_source.indicator_mapping import ALL_INDICATOR_MAPPING
 from xqdata.utils import convert_to_timestamp,convert_timestamp_to_str
 from xqdata.data_proxy import DataProxy
 
-import pdb
-
 def history_tradings(order_book_ids, bar_count, frequency, dt, fields=['date','open','high','low','close'], skip_suspended=True, include_now=True, adjust_type="pre", adjust_orig=None):
     #get_bars(security, count, unit='1d', fields=['date','open','high','low','close'], include_now=False, end_dt=None, fq_ref_date=None)
     if "date" not in fields:
@@ -19,7 +17,6 @@ def history_tradings(order_book_ids, bar_count, frequency, dt, fields=['date','o
     data = data.set_index(["order_book_id","datetime"])
     data = data.drop(columns=["level_1","date"])
     return data
-
 
 def create_a_query_object(order_book_ids, fields):
     indicator_expr_list = []
