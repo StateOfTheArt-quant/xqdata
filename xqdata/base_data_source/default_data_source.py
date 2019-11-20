@@ -42,6 +42,8 @@ class DefaultDataSource(AbstractDataSource):
     
     def get_trading_calendar(self):
         trading_dates = get_all_trade_days()
-        trads_dates_timestamp = list(map(convert_to_timestamp, trading_dates))
-        return pd.Index(trads_dates_timestamp)
+        #pdb.set_trace()
+        trading_dates_timestamp = list(map(convert_to_timestamp, trading_dates))
+        return pd.Index(trading_dates_timestamp)
+
     

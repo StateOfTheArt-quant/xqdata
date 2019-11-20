@@ -1,12 +1,23 @@
 import pandas as pd
-from jqdatasdk import query, get_fundamentals, get_fundamentals_continuously, valuation, get_price, get_bars
+from jqdatasdk import query, get_fundamentals, get_fundamentals_continuously, valuation, get_price, get_bars, get_all_trade_days
+from xqdata.trading_dates_mixin import TradingDatesMixin
 from xqdata.base_data_source.indicator_mapping import ALL_INDICATOR_MAPPING
 from xqdata.utils import convert_to_timestamp
-from xqdata.data_proxy import DataProxy
+
 from xqdata.utils import convert_timestamp_to_str
 import pdb
 
+#def create_trading_dates_index():
+#    trading_dates = get_all_trade_days()
+#    pdb.set_trace()
+#    trading_dates_timestamp = list(map(convert_to_timestamp, trading_dates))
+#    return pd.Index(trading_dates_timestamp)
+##
+#trading_dates_index = create_trading_dates_index()
+#trading_dates_mixin = TradingDatesMixin(trading_dates_index)
+
 def history_tradings(order_book_ids, bar_count, frequency, dt, fields=['date','open','high','low','close'], skip_suspended=True, include_now=True, adjust_type="pre", adjust_orig=None):
+    from xqdata.data_proxy import DataProxy
     #get_bars(security, count, unit='1d', fields=['date','open','high','low','close'], include_now=False, end_dt=None, fq_ref_date=None)
     if "date" not in fields:
         fields.append("date")
@@ -26,7 +37,7 @@ def create_a_query_object(order_book_ids, fields):
         try:
             indicator_expr = ALL_INDICATOR_MAPPING[indicator_str]
         except KeyError:
-            raise Exception("the indicator str:{} is not availabel".format(indicator_str))
+            raise Exception("the indicator str:{} is not available".format(indicator_str))
         else:
             indicator_expr_list.append(indicator_expr)
     # support 1 and mant order_book_ids
@@ -61,6 +72,7 @@ def get_fundamental_data(order_book_ids, fields, dt_list):
 #
 #
 def _history_bars_fundamentals_jq(order_book_ids, bar_count, fields=None, dt=None):
+    from xqdata.data_proxy import DataProxy
     # 
     start_date = DataProxy.get_instance().get_previous_trading_date(dt, n=bar_count)
     start_date = convert_timestamp_to_str(start_date)
@@ -76,6 +88,7 @@ def _merge_asof(data1, data2):
 #
 #
 def history_bars_fundamentals_jq(order_book_ids, bar_count, frequency, fields=None, dt=None):
+    from xqdata.data_proxy import DataProxy
     """
     return: [pd.Panel] 
            Items: date
@@ -125,18 +138,3 @@ def history_bars_fundamentals_jq(order_book_ids, bar_count, frequency, fields=No
         
         data = turnover.to_frame().join(data_df, how='outer')
         return data  
-#        pdb.set_trace()
-#        turnover_df = turnover_df.merge(frequency_date_df, how='outer', left_index=True, right_index=True)
-#        turnover_df['date'] = turnover_df['date'].fillna(method='bfill')
-#        turnover_df = turnover_df.groupby('date').sum()
-#        #turnover_df = turnover_df.dropna()
-#        data_container = {}
-#        for order_book_id in data_panel.minor_axis:
-#            data_df = data_panel.minor_xs(order_book_id)
-#            turnover_symbol_df = turnover_df[[order_book_id]]
-#            turnover_symbol_df = turnover_symbol_df.rename(columns={order_book_id:"turnover_ratio"})
-#            data_df = data_df.merge(turnover_symbol_df, how='outer', left_index=True, right_index=True)
-#            data_container[order_book_id] = data_df
-#            #pdb.set_trace()
-#        return pd.Panel(data_container).transpose(1,2,0)
-            
