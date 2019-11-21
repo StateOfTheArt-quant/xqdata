@@ -15,3 +15,11 @@ class AbstractDataSource(object):
                 
     def get_trading_calendar(self):
         raise NotImplementedError
+    
+    def index_components(self, order_book_id, dt):
+        raise NotImplementedError
+    
+    def get_instrument_industry(self, order_book_id, dt):
+        raise NotImplementedError
+        
+        

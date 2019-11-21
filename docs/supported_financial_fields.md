@@ -26,3 +26,20 @@ money: 成交额
 
 ## 2.2 支持的财务数据字段
 [财务数据字段](https://www.joinquant.com/help/api/help?name=Stock#财务数据列表)
+
+# 3 支持的指数数据及证券代码
+[支持的指数数据及证券代码](https://www.joinquant.com/indexData)
+
+
+# 4 行业数据
+~~~
+name: 行业代码:
+"sw_l1": 申万一级行业
+"sw_l2": 申万二级行业
+"sw_l3": 申万三级行业
+"jq_l1": 聚宽一级行业
+"jq_l2": 聚宽二级行业
+"zjw": 证监会行业
+~~~
+[行业成分类别及代码](https://www.joinquant.com/help/api/help?name=plateData#%E8%A1%8C%E4%B8%9A%E6%A6%82%E5%BF%B5%E6%95%B0%E6%8D%AE)
+

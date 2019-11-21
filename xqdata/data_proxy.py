@@ -32,3 +32,9 @@ class DataProxy(TradingDatesMixin):
     
     def history_tradings(self, order_book_ids, bar_count, dt, fields=None, frequency='1d',skip_suspended=True, include_now=True, adjust_type="pre", adjust_orig=None):
         return self._data_source.history_tradings(order_book_ids=order_book_ids, bar_count=bar_count, dt=dt, fields=fields, frequency=frequency,skip_suspended=skip_suspended, include_now=include_now, adjust_type=adjust_type, adjust_orig=adjust_orig)
+    
+    def index_components(self, order_book_id, dt=None):
+        return self._data_source.index_components(order_book_id=order_book_id,dt=dt)
+    
+    def get_instrument_industry(self, order_book_ids, dt=None):
+        return self._data_source.get_instrument_industry(order_book_ids=order_book_ids,dt=dt)
