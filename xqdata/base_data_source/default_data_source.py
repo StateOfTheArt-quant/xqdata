@@ -38,7 +38,7 @@ class DefaultDataSource(AbstractDataSource):
                 fundamental_fields.append(field)
             else:
                 raise ValueError("{} is not support right now".format(field))
-        
+
         if len(fundamental_fields) == 0:
             trading_data = self.history_tradings(order_book_ids=order_book_ids, bar_count=bar_count, frequency=frequency, dt=dt, fields=trading_fields, skip_suspended=skip_suspended, include_now=include_now, adjust_type=adjust_type, adjust_orig=adjust_orig)
             return trading_data

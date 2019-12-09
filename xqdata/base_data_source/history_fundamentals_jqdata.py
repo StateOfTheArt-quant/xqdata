@@ -5,12 +5,23 @@ from xqdata.base_data_source.indicator_mapping import ALL_INDICATOR_MAPPING
 from xqdata.utils import convert_to_timestamp,convert_timestamp_to_str
 from xqdata.data_proxy import DataProxy
 
-def history_tradings(order_book_ids, bar_count, frequency, dt, fields=['date','open','high','low','close'], skip_suspended=True, include_now=True, adjust_type="pre", adjust_orig=None):
+def _get_price(order_book_ids, bar_count, dt, fields, frequency='daily', skip_suspended=False, include_now=True, adjust_type="post", adjust_orig=None):
+    data = get_price(security=order_book_ids, start_date=None, end_date=dt, frequency=frequency, fields=fields, skip_paused=skip_suspended, fq=adjust_type, count=bar_count,panel=False,fill_paused=False)
+    data["time"] = data["time"].apply(convert_to_timestamp)
+    data = data.rename(columns={"code":"order_book_id","time":"datetime"})
+    data = data.set_index(["order_book_id","datetime"])
+    return data
+
+def history_tradings(order_book_ids, bar_count, frequency, dt, fields=['date','open','high','low','close'], skip_suspended=False, include_now=True, adjust_type="pre", adjust_orig=None):
     #get_bars(security, count, unit='1d', fields=['date','open','high','low','close'], include_now=False, end_dt=None, fq_ref_date=None)
+
+    dt = DataProxy.get_instance().get_next_trading_date(dt,n=1)
+    if frequency == "1d":
+        data = _get_price(order_book_ids=order_book_ids, bar_count=bar_count, dt=dt,frequency="daily",fields=fields,skip_suspended=skip_suspended, include_now=include_now, adjust_type=adjust_type, adjust_orig=adjust_orig)
+        return data
+
     if "date" not in fields:
         fields.append("date")
-        
-    dt = DataProxy.get_instance().get_next_trading_date(dt,n=1)
     data = get_bars(security=order_book_ids, count=bar_count, unit=frequency, end_dt=dt,fields=fields, include_now=include_now,fq_ref_date=adjust_orig)
     data["datetime"] = data["date"].apply(convert_to_timestamp)
     data = data.reset_index().rename(columns={"level_0":"order_book_id"})

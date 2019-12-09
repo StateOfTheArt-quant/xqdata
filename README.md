@@ -6,7 +6,7 @@
 
 below is an example to show how to use xqdata
 ~~~
->>> from xqdata.api import history_nars
+>>> from xqdata.api import history_bars
 >>> data = history_bars(order_book_ids=["000001.XSHG", "000002.XSHG"], bar_count=4, frequency="1w", fields=["open","close", "market_cap", "pe_ratio"], dt="2019-08-20")
                            open  close  market_cap  pe_ratio
 order_book_id datetime                                      
