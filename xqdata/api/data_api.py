@@ -12,7 +12,7 @@ def export_as_api(func):
     return func
 
 @export_as_api
-def history_bars(order_book_ids, bar_count, frequency, fields=None, dt=None, skip_suspended=True, include_now=True, adjust_type='pre',adjust_orig=None):
+def history_bars(order_book_ids, bar_count, frequency, fields=None, dt=None, skip_suspended=False, include_now=True, adjust_type='pre',adjust_orig=None):
     """
     :param order_book_id: 合约代码
     :type order_book_id: `str`
